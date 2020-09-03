@@ -137,6 +137,7 @@ function buildAvgResponse (ticketArray, callback) {
  *
  */
 apiTickets.get = function (req, res) {
+  console.log("SDSDSDSDSD")
   var l = req.query.limit ? req.query.limit : 10
   var limit = parseInt(l)
   var page = parseInt(req.query.page)
@@ -144,6 +145,7 @@ apiTickets.get = function (req, res) {
   var status = req.query.status
   var user = req.user
 
+  console.log('USER')
   var object = {
     user: user,
     limit: limit,
@@ -240,7 +242,7 @@ apiTickets.getByGroup = function (req, res) {
     limit: limit,
     page: page
   }
-
+  console.log('HEREEEEE')
   var ticketSchema = require('../../../models/ticket')
   ticketSchema.getTicketsWithObject([groupId], obj, function (err, tickets) {
     if (err) return res.status(500).json({ success: false, error: err.message })
@@ -318,7 +320,7 @@ apiTickets.search = function (req, res) {
   var ticketModel = require('../../../models/ticket')
   var groupModel = require('../../../models/group')
   var departmentModel = require('../../../models/department')
-
+console.log('HEREEEEE1')
   async.waterfall(
     [
       function (callback) {
@@ -409,6 +411,8 @@ apiTickets.create = function (req, res) {
   var response = {}
   response.success = true
 
+  console.log('Body')
+  console.log(req.body)
   var postData = req.body
   if (!_.isObject(postData) || !postData.subject || !postData.issue)
     return res.status(400).json({ success: false, error: 'Invalid Post Data' })
@@ -436,6 +440,10 @@ apiTickets.create = function (req, res) {
   }
 
   ticket.subject = sanitizeHtml(ticket.subject).trim()
+  ticket.name = sanitizeHtml(ticket.name).trim()
+  ticket.email = sanitizeHtml(ticket.email).trim()
+  ticket.phone = sanitizeHtml(ticket.phone).trim()
+  ticket.ticketType = sanitizeHtml(ticket.ticketType).trim()
 
   var marked = require('marked')
   var tIssue = ticket.issue
@@ -718,6 +726,9 @@ apiTickets.update = function (req, res) {
       return res.status(401).json({ success: false, error: 'Invalid Permissions' })
     }
     var oId = req.params.id
+
+    console.log('Update')
+    console.log(req.body)
     var reqTicket = req.body
     if (_.isUndefined(oId)) return res.status(400).json({ success: false, error: 'Invalid Ticket ObjectID.' })
     var ticketModel = require('../../../models/ticket')
@@ -768,6 +779,13 @@ apiTickets.update = function (req, res) {
           function (cb) {
             if (!_.isUndefined(reqTicket.issue) && !_.isNull(reqTicket.issue)) {
               ticket.issue = sanitizeHtml(reqTicket.issue).trim()
+            }
+
+            return cb()
+          },
+          function (cb) {
+            if (!_.isUndefined(reqTicket.name) && !_.isNull(reqTicket.name)) {
+              ticket.name = sanitizeHtml(reqTicket.name).trim()
             }
 
             return cb()
@@ -1368,6 +1386,7 @@ apiTickets.deletePriority = function (req, res) {
  *
  */
 apiTickets.getTicketStats = function (req, res) {
+  console.log('HEREEEEE22')
   var timespan = 30
   if (req.params.timespan) {
     timespan = parseInt(req.params.timespan)
@@ -1444,6 +1463,7 @@ apiTickets.getTicketStats = function (req, res) {
 }
 
 function parseTicketStats (role, tickets, callback) {
+  console.log('HEREEEEE4')
   if (_.isEmpty(tickets)) return callback({ tickets: tickets, tags: {} })
   var t = []
   var tags = {}
@@ -1509,6 +1529,7 @@ function parseTicketStats (role, tickets, callback) {
  *
  */
 apiTickets.getTicketStatsForGroup = function (req, res) {
+  console.log('HEREEEEE5')
   var groupId = req.params.group
   if (groupId === 0) return res.status(200).json({ success: false, error: 'Please Select Group.' })
   if (_.isUndefined(groupId)) return res.status(400).json({ success: false, error: 'Invalid Group Id.' })
@@ -1592,6 +1613,7 @@ apiTickets.getTicketStatsForGroup = function (req, res) {
  *
  */
 apiTickets.getTicketStatsForUser = function (req, res) {
+  console.log('HEREEEEE6')
   var userId = req.params.user
   if (userId === 0) return res.status(200).json({ success: false, error: 'Please Select User.' })
   if (_.isUndefined(userId)) return res.status(400).json({ success: false, error: 'Invalid User Id.' })
@@ -1708,6 +1730,7 @@ apiTickets.getTagCount = function (req, res) {
  }
  */
 apiTickets.getTopTicketGroups = function (req, res) {
+  console.log('HEREEEEE8')
   var ticketModel = require('../../../models/ticket')
   var top = req.params.top
   var timespan = req.params.timespan

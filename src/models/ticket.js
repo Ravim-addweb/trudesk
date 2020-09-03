@@ -105,7 +105,12 @@ var ticketSchema = mongoose.Schema({
   notes: [noteSchema],
   attachments: [attachmentSchema],
   history: [historySchema],
-  subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'accounts' }]
+  subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'accounts' }],
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  phone: { type: String, required: true },
+  ticketType: { type: String, required: true}
+
 })
 
 ticketSchema.index({ deleted: -1, group: 1, status: 1 })
@@ -433,13 +438,21 @@ ticketSchema.methods.setTicketDueDate = function (ownerId, dueDate, callback) {
  *    });
  * });
  */
-ticketSchema.methods.setIssue = function (ownerId, issue, callback) {
+ticketSchema.methods.setIssue = function (ownerId, issue, name, email, phone, callback) {
   var marked = require('marked')
 
   var self = this
   issue = issue.replace(/(\r\n|\n\r|\r|\n)/g, '<br>')
   issue = sanitizeHtml(issue).trim()
+  name = sanitizeHtml(name).trim()
+  email = sanitizeHtml(email).trim()
+  phone = sanitizeHtml(phone).trim()
+
+
   self.issue = marked(issue)
+  self.name = name
+  self.email = email
+  self.phone = phone
 
   var historyItem = {
     action: 'ticket:update:issue',
@@ -458,6 +471,20 @@ ticketSchema.methods.setSubject = function (ownerId, subject, callback) {
   var historyItem = {
     action: 'ticket:update:subject',
     description: 'Ticket Subject was updated.',
+    owner: ownerId
+  }
+
+  self.history.push(historyItem)
+
+  return callback(null, self)
+}
+
+ticketSchema.methods.setName = function (ownerId, name, callback) {
+  var self = this
+  self.name = name
+  var historyItem = {
+    action: 'ticket:update:name',
+    description: 'Ticket Name was updated.',
     owner: ownerId
   }
 
@@ -838,9 +865,11 @@ ticketSchema.statics.getTicketsWithObject = function (grpId, object, callback) {
     grpId = _.intersection(object.filter.groups, g)
   }
 
+  console.log('Object')
+  console.log(object)
   var q = self
     .model(COLLECTION)
-    .find({ group: { $in: grpId }, deleted: false })
+    .find({ group: { $in: grpId }, owner: object.ownerId, deleted: false })
     .populate(
       'owner assignee subscribers comments.owner notes.owner history.owner',
       'username fullname email role image title'

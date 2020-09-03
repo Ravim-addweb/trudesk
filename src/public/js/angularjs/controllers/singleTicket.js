@@ -219,15 +219,20 @@ define([
         var $editTicketWindow = $('#edit-ticket-window')
         var ticketId = $editTicketWindow.attr('data-ticket-id')
         var $subject = $editTicketWindow.find('input#edit-subject-input')
+        var $name = $editTicketWindow.find('input#edit-name-input')
+
         var $saveButton = $editTicketWindow.find('.action-panel button[data-save-type]')
         var saveType = null
         if ($saveButton.length > 0) saveType = $saveButton.attr('data-save-type')
 
         if (saveType.toLowerCase() === 'issue') {
           var subjectText = $subject.val()
+          var nameText = $name.val()
+          console.log('name')
+          console.log(nameText)
           var issueText = editIssueTextMDE.codemirror.getValue()
 
-          socket.ui.setTicketIssue(ticketId, issueText, subjectText)
+          socket.ui.setTicketIssue(ticketId, issueText, subjectText, nameText)
           $scope.hideEditWindow()
         } else if (saveType.toLowerCase() === 'comment') {
           var commentId = $editTicketWindow.attr('data-id')

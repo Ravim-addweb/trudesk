@@ -35,6 +35,14 @@ function mainRoutes (router, middleware, controllers) {
     controllers.main.dashboard
   )
 
+  router.get(
+    '/multitenants',
+    middleware.redirectToLogin,
+    middleware.redirectIfUser,
+    middleware.loadCommonData,
+    controllers.main.multitenants
+  )
+
   router.get('/login', function (req, res) {
     return res.redirect('/')
   })

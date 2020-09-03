@@ -36,6 +36,9 @@ class IssuePartial extends React.Component {
   @observable status = null
   @observable owner = null
   @observable subject = ''
+  @observable name = ''
+  @observable phone = ''
+  @observable email = ''
   @observable issue = ''
   @observable attachments = []
 
@@ -48,6 +51,10 @@ class IssuePartial extends React.Component {
     this.subject = this.props.subject
     this.issue = this.props.issue
     this.attachments = this.props.attachments
+    this.name = this.props.name
+    this.email = this.props.email
+    this.phone = this.props.phone
+
 
     this.onUpdateTicketIssue = this.onUpdateTicketIssue.bind(this)
     this.onUpdateTicketAttachments = this.onUpdateTicketAttachments.bind(this)
@@ -67,6 +74,9 @@ class IssuePartial extends React.Component {
     if (prevProps.subject !== this.props.subject) this.subject = this.props.subject
     if (prevProps.issue !== this.props.issue) this.issue = this.props.issue
     if (prevProps.attachments !== this.props.attachments) this.attachments = this.props.attachments
+    if (prevProps.name !== this.props.name) this.name = this.props.name
+    if (prevProps.email !== this.props.email) this.email = this.props.email
+    if (prevProps.phone !== this.props.phone) this.phone = this.props.phone
   }
 
   componentWillUnmount () {
@@ -78,6 +88,9 @@ class IssuePartial extends React.Component {
     if (this.ticketId === data._id) {
       this.subject = data.subject
       this.issue = data.issue
+      this.name = data.name
+      this.email = data.email
+      this.phone = data.phone
     }
   }
 
@@ -172,8 +185,11 @@ class IssuePartial extends React.Component {
                   this.props.editorWindow.openEditorWindow({
                     subject: this.subject,
                     text: this.issue,
+                    name: this.name,
+                    email: this.email,
+                    phone: this.phone,
                     onPrimaryClick: data => {
-                      socket.ui.setTicketIssue(this.ticketId, data.text, data.subjectText)
+                      socket.ui.setTicketIssue(this.ticketId, data.text, data.subjectText, data.nameText, data.emailText, data.phoneText)
                     }
                   })
               }}

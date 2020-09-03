@@ -96,6 +96,18 @@ mainController.dashboard = function (req, res) {
   return res.render('dashboard', content)
 }
 
+mainController.multitenants = function (req, res) {
+  var content = {}
+  content.title = 'Multi Tenants'
+  content.nav = 'multitenants'
+
+  content.data = {}
+  content.data.user = req.user
+  content.data.common = req.viewdata
+
+  return res.render('multi_tenants', content)
+}
+
 mainController.loginPost = function (req, res, next) {
   passport.authenticate('local', function (err, user) {
     if (err) {

@@ -44,6 +44,11 @@ ticketsV2.get = function (req, res) {
     page: page
   }
 
+  console.log("SDSDSDDSD")
+  queryObject.ownerId = req._passport.session.user;
+  console.log("SDSDSDDSD1")
+
+
   async.waterfall(
     [
       function (next) {

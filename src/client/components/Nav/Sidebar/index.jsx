@@ -323,6 +323,13 @@ class Sidebar extends React.Component {
         <NavSeparator />
         <SidebarItem href='/about' icon='help' text='About' active={activeItem === 'about'} />
         <SidebarItem href={'https://www.trudesk.io'} icon={'cloud'} text={'Cloud'} target={'_blank'} />
+        <SidebarItem
+            text='Multi Tenants'
+            icon='dashboard'
+            href='/multitenants'
+            class='navHome'
+            active={activeItem === 'multitenants'}
+          />
       </ul>
     )
   }

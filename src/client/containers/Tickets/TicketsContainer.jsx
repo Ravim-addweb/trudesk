@@ -335,13 +335,17 @@ class TicketsContainer extends React.Component {
               <TableHeader key={6} width={175} text={'Customer'} />,
               <TableHeader key={7} text={'Assignee'} />,
               <TableHeader key={8} width={110} text={'Due Date'} />,
-              <TableHeader key={9} text={'Updated'} />
+              <TableHeader key={9} text={'Updated'} />,
+              <TableHeader key={10} text={'Name'} />,
+              <TableHeader key={11} text={'Email'} />,
+              <TableHeader key={12} text={'Phone'} />,
+              <TableHeader key={13} text={'Ticket Type'} /> 
             ]}
           >
             {!this.props.loading && this.props.tickets.size < 1 && (
               <TableRow clickable={false}>
                 <TableCell colSpan={10}>
-                  <h5 style={{ margin: 10 }}>No Tickets Found</h5>
+                  <h5 style={{ margin: 14 }}>No Tickets Found</h5>
                 </TableCell>
               </TableRow>
             )}
@@ -432,6 +436,11 @@ class TicketsContainer extends React.Component {
                     <TableCell className={'vam nbb'}>{assignee()}</TableCell>
                     <TableCell className={'vam nbb'}>{dueDate}</TableCell>
                     <TableCell className={'vam nbb'}>{updated}</TableCell>
+                    <TableCell className={'vam nbb'}>{ticket.get('name')}</TableCell> 
+                    <TableCell className={'vam nbb'}>{ticket.get('email')}</TableCell>
+                    <TableCell className={'vam nbb'}>{ticket.get('phone')}</TableCell>   
+                    <TableCell className={'vam nbb'}>{ticket.get('ticketType')}</TableCell>                   
+
                   </TableRow>
                 )
               })}

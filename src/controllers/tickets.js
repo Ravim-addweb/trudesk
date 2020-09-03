@@ -115,7 +115,7 @@ ticketsController.getByStatus = function (req, res, next) {
       s = 3
       break
   }
-
+  console.log('1')
   processor.subnav += tType
   processor.pagetype = tType
   processor.object.status.push(s)
@@ -144,9 +144,10 @@ ticketsController.getActive = function (req, res, next) {
   processor.object = {
     limit: 50,
     page: page,
-    status: [0, 1, 2]
+    status: [0, 1, 2],
+    user: req.user._id
   }
-
+  console.log('Active')
   req.processor = processor
 
   return next()
@@ -177,6 +178,7 @@ ticketsController.getAssigned = function (req, res, next) {
     assignedSelf: true,
     user: req.user._id
   }
+  console.log('2')
 
   req.processor = processor
 
@@ -208,6 +210,7 @@ ticketsController.getUnassigned = function (req, res, next) {
     unassigned: true,
     user: req.user._id
   }
+  console.log('3')
 
   req.processor = processor
 
@@ -258,6 +261,7 @@ ticketsController.filter = function (req, res, next) {
     assignee: assignee,
     raw: rawNoPage
   }
+  console.log('4')
 
   var processor = {}
   processor.title = 'Tickets'
@@ -302,6 +306,7 @@ ticketsController.processor = function (req, res) {
   var object = processor.object
   content.data.page = object.page
   content.data.filter = object.filter
+  console.log(req.user)
 
   return res.render(processor.renderpage, content)
 }
@@ -427,6 +432,7 @@ ticketsController.single = function (req, res) {
   if (isNaN(uid)) {
     return res.redirect('/tickets')
   }
+  console.log('6')
 
   var content = {}
   content.title = 'Tickets - ' + req.params.id

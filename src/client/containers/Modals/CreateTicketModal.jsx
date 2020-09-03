@@ -42,6 +42,7 @@ class CreateTicketModal extends React.Component {
   @observable allAccounts = this.props.accounts || []
   @observable groupAccounts = []
   @observable selectedPriority = ''
+  @observable selectedType = ''
   issueText = ''
 
   constructor (props) {
@@ -66,6 +67,10 @@ class CreateTicketModal extends React.Component {
 
   componentWillUnmount () {
     if (this.defaultTicketTypeWatcher) this.defaultTicketTypeWatcher()
+  }
+
+  onCustomTypeChange (e) {
+    this.selectedType = e.target.value
   }
 
   onTicketTypeSelectChange (e) {
@@ -138,6 +143,10 @@ class CreateTicketModal extends React.Component {
     data.priority = this.selectedPriority
     data.issue = this.issueMde.easymde.value()
     data.socketid = socket.ui.socket.io.engine.id
+    data.name = e.target.name.value
+    data.email = e.target.email.value
+    data.phone = e.target.phone.value
+    data.ticketType = this.selectedType
 
     this.props.createTicket(data)
   }
@@ -175,6 +184,9 @@ class CreateTicketModal extends React.Component {
     const mappedTicketTypes = this.props.viewdata.ticketTypes.map(type => {
       return { text: type.name, value: type._id }
     })
+
+    const customTicketTypes = [{text: 'Technical', value: 'Technical' },
+    { text: 'Sales/Business', value: 'Sales/Business'}]
     const mappedTicketTags = this.props.viewdata.ticketTags.map(tag => {
       return { text: tag.name, value: tag._id }
     })
@@ -305,6 +317,47 @@ class CreateTicketModal extends React.Component {
               {/* eslint-disable-next-line react/no-unescaped-entities */}
               troubleshooting steps you've taken.
             </span>
+          </div>
+          <div className='uk-margin-medium-bottom'>
+            <label>Name</label>
+            <input
+              type='text'
+              name={'name'}
+              className={'md-input'}
+              data-validation='required'
+            />
+          </div>
+          <div className='uk-margin-medium-bottom'>
+              <label>Email</label>
+              <input
+                type='email'
+                name={'email'}
+                className={'md-input'}
+                data-validation='email'
+              />
+            </div>
+          <div className='uk-margin-medium-bottom'>
+            <label>Phone</label>
+            <input
+              type='number'
+              name={'phone'}
+              className={'md-input'}
+              data-validation='number'
+            />
+          </div>
+          <div className='uk-margin-medium-bottom'>           
+            <label className={'uk-form-label'}>Ticket Type</label>
+            <SingleSelect
+              showTextbox={false}
+              items={customTicketTypes}
+              width={'100%'}
+              onSelectChange={e => {
+                    this.onCustomTypeChange(e)
+                  }}
+              defaultValue={'Technical'}    
+              ref={i => (this.selectedType = i)}
+              data-validation='required'
+            />              
           </div>
           <div className='uk-modal-footer uk-text-right'>
             <Button text={'Cancel'} flat={true} waves={true} extraClass={'uk-modal-close'} />

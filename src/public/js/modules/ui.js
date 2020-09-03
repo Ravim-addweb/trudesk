@@ -162,11 +162,14 @@ define('modules/ui', [
 
     socket.emit('setTicketDueDate', payload)
   }
-  socketUi.setTicketIssue = function (ticketId, issue, subject) {
+  socketUi.setTicketIssue = function (ticketId, issue, subject, name, email, phone) {
     var payload = {
       ticketId: ticketId,
       issue: issue,
-      subject: subject
+      subject: subject,
+      name: name,
+      email: email,
+      phone: phone
     }
 
     socket.emit('setTicketIssue', payload)

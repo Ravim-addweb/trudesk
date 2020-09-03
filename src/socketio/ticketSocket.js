@@ -295,6 +295,11 @@ events.onSetTicketIssue = function (socket) {
     var ticketId = data.ticketId
     var issue = data.issue
     var subject = data.subject
+    console.log(data)
+    var name = data.name
+    var email = data.email
+    var phone = data.phone
+
     var ownerId = socket.request.user._id
     if (_.isUndefined(ticketId) || _.isUndefined(issue)) return true
 
@@ -304,7 +309,7 @@ events.onSetTicketIssue = function (socket) {
       ticket.setSubject(ownerId, subject, function (err, ticket) {
         if (err) return true
 
-        ticket.setIssue(ownerId, issue, function (err, t) {
+        ticket.setIssue(ownerId, issue, name, email, phone, function (err, t) {
           if (err) return true
 
           t.save(function (err, tt) {

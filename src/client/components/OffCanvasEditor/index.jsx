@@ -26,6 +26,9 @@ import helpers from 'lib/helpers'
 class OffCanvasEditor extends React.Component {
   @observable mdeText = ''
   @observable subjectText = ''
+  @observable nameText = ''
+  @observable emailText = ''
+  @observable phoneText = ''
   @observable showSubject = true
   @observable onPrimaryClick = null
 
@@ -48,7 +51,10 @@ class OffCanvasEditor extends React.Component {
   primaryClick () {
     const data = {
       subjectText: this.subjectText,
-      text: this.mdeText
+      text: this.mdeText,
+      nameText: this.nameText,
+      emailText: this.emailText,
+      phoneText: this.phoneText
     }
 
     if (this.onPrimaryClick) this.onPrimaryClick(data)
@@ -61,6 +67,9 @@ class OffCanvasEditor extends React.Component {
     this.mdeText = data.text || ''
     this.editor.setEditorText(this.mdeText)
     this.showSubject = data.showSubject !== undefined ? data.showSubject : true
+    this.nameText = data.name || ''
+    this.emailText = data.email || ''
+    this.phoneText = data.phone || ''
 
     this.onPrimaryClick = data.onPrimaryClick || null
 
@@ -106,6 +115,36 @@ class OffCanvasEditor extends React.Component {
                 />
               </div>
             </div>
+          </div>
+
+          <div className='edit-name-wrap'>
+            <label htmlFor='edit-name-input'>Name</label>
+            <input
+              id='edit-name-input'
+              className='md-input mb-10'
+              value={this.nameText}
+              onChange={e => (this.nameText = e.target.value)}
+            />
+          </div>
+
+          <div className='edit-email-wrap'>
+            <label htmlFor='edit-email-input'>Email</label>
+            <input
+              id='edit-email-input'
+              className='md-input mb-10'
+              value={this.emailText}
+              onChange={e => (this.emailText = e.target.value)}
+            />
+          </div>
+
+          <div className='edit-phone-wrap'>
+            <label htmlFor='edit-phone-input'>Phone</label>
+            <input
+              id='edit-phone-input'
+              className='md-input mb-10'
+              value={this.phoneText}
+              onChange={e => (this.phoneText = e.target.value)}
+            />
           </div>
 
           <div className='action-panel'>
